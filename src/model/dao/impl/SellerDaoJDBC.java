@@ -3,6 +3,7 @@ package model.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import db.DB;
@@ -53,21 +54,14 @@ public class SellerDaoJDBC implements SellerDAO{
 			rs = st.executeQuery();
 			
 			while(rs.next()) {
-				seller = new Seller();
-				seller.setId(rs.getInt("Id"));
-				seller.setName(rs.getString("Name"));
-				seller.setEmail(rs.getString("Email"));
-				seller.setBirthDate(rs.getDate("BirthDate"));
-				seller.setBaseSalary(rs.getBigDecimal("BaseSalary"));
+				Department dep = instanciateDepartment(rs);
+				
+				seller = instanciateSeller(rs, dep);
 
-				Department dep = new Department();
-				dep.setId(rs.getInt("DepartmentId"));
-				dep.setName(rs.getString("DepName"));
-				
-				seller.setDepartment(dep);
-				
 				return seller;
 			}
+			return null;
+			
 		} catch (Throwable t) {
 			t.printStackTrace();
 			throw new DBException(t.getMessage());
@@ -75,11 +69,29 @@ public class SellerDaoJDBC implements SellerDAO{
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
-		return null;
 	}
+
 
 	@Override
 	public List<Seller> findAll() {
 		return null;
+	}
+	
+	private Seller instanciateSeller(ResultSet rs, Department dep) throws SQLException {
+		Seller seller = new Seller();
+		seller.setId(rs.getInt("Id"));
+		seller.setName(rs.getString("Name"));
+		seller.setEmail(rs.getString("Email"));
+		seller.setBirthDate(rs.getDate("BirthDate"));
+		seller.setBaseSalary(rs.getBigDecimal("BaseSalary"));
+		seller.setDepartment(dep);
+		return seller;
+	}
+
+	private Department instanciateDepartment(ResultSet rs) throws SQLException {
+		Department dep = new Department();
+		dep.setId(rs.getInt("DepartmentId"));
+		dep.setName(rs.getString("DepName"));
+		return dep;
 	}
 }
