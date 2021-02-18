@@ -49,5 +49,11 @@ public class Program {
 		sellerDAO.update(seller);
 		System.out.println("Update complete!");
 		
+		System.out.println();
+		System.out.println("==== TESTE 6: seller delete =====");
+		seller = sellerDAO.findById(7);
+		sellerDAO.deleteById(seller.getId());
+		System.out.println("Delete complete!");
+		
 	}
 }
