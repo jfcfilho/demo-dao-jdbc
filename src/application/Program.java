@@ -1,5 +1,7 @@
 package application;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import model.dao.DAOFactory;
@@ -28,6 +30,17 @@ public class Program {
 		System.out.println("==== TESTE 3: seller findAll =====");
 		List<Seller> allSellers = sellerDAO.findAll();
 		allSellers.forEach(System.out::println);
+		
+		System.out.println();
+		System.out.println("==== TESTE 4: seller insert =====");
+		Seller newSeller = new Seller();
+		newSeller.setName("Greg");
+		newSeller.setEmail("greg@gmail.com");
+		newSeller.setBirthDate(new Date());
+		newSeller.setBaseSalary(new BigDecimal(4000));
+		newSeller.setDepartment(department);
+		sellerDAO.insert(newSeller);
+		System.out.println("Inserted New Id = " + newSeller.getId());
 		
 	}
 }
